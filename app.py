@@ -7,9 +7,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
 
 app = Flask(__name__)
-CORS(app, origins = "http://localhost:5173")
 
-
+CORS(app, origins=[
+    "http://localhost:5173",
+    "https://mingogg.github.io"  # o tu URL final del frontend
+])
 
 def get_db_connection():
     import os
