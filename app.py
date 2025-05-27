@@ -10,10 +10,23 @@ app = Flask(__name__)
 CORS(app, origins = "http://localhost:5173")
 
 
+
 def get_db_connection():
     import os
-    conn = psycopg2.connect(os.environ.get("DATABASE_URL"))
+    import urllib.parse as up
+
+    up.uses_netloc.append("postgres")
+    url = up.urlparse(os.environ["DATABASE_URL"])
+
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
     return conn
+
 
 def get_user_id_from_token():
     auth_header = request.headers.get("Authorization", "")
